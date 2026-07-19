@@ -106,9 +106,9 @@ export function AddEntryForm({ onSuccess }: AddEntryFormProps) {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
-      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.3 }}
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-4"
+      className="space-y-4 max-h-[80vh] overflow-y-auto px-1"
     >
       {/* Title */}
       <div className="space-y-2">
@@ -117,7 +117,7 @@ export function AddEntryForm({ onSuccess }: AddEntryFormProps) {
           id="title"
           {...register('title')}
           placeholder="Enter title..."
-          className="bg-background border-border/50 focus:ring-2 focus:ring-primary/20"
+          className="bg-background border-border/50"
           autoFocus
         />
         <AnimatePresence>
@@ -142,7 +142,7 @@ export function AddEntryForm({ onSuccess }: AddEntryFormProps) {
             value={watch('type')}
             onValueChange={(value: any) => setValue('type', value)}
           >
-            <SelectTrigger className="bg-background border-border/50 focus:ring-2 focus:ring-primary/20">
+            <SelectTrigger className="bg-background border-border/50">
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="bg-background border-border shadow-lg">
@@ -158,7 +158,7 @@ export function AddEntryForm({ onSuccess }: AddEntryFormProps) {
             value={watch('status')}
             onValueChange={(value: any) => setValue('status', value)}
           >
-            <SelectTrigger className="bg-background border-border/50 focus:ring-2 focus:ring-primary/20">
+            <SelectTrigger className="bg-background border-border/50">
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="bg-background border-border shadow-lg">
@@ -183,7 +183,7 @@ export function AddEntryForm({ onSuccess }: AddEntryFormProps) {
             max={10}
             {...register('rating', { valueAsNumber: true })}
             placeholder="Rate..."
-            className="bg-background border-border/50 focus:ring-2 focus:ring-primary/20"
+            className="bg-background border-border/50"
           />
         </div>
 
@@ -193,7 +193,7 @@ export function AddEntryForm({ onSuccess }: AddEntryFormProps) {
             value={watch('genre') || undefined}
             onValueChange={(value) => setValue('genre', value)}
           >
-            <SelectTrigger className="bg-background border-border/50 focus:ring-2 focus:ring-primary/20">
+            <SelectTrigger className="bg-background border-border/50">
               <SelectValue placeholder="Select genre" />
             </SelectTrigger>
             <SelectContent className="bg-background border-border shadow-lg max-h-[200px] overflow-y-auto">
@@ -207,18 +207,18 @@ export function AddEntryForm({ onSuccess }: AddEntryFormProps) {
         </div>
       </div>
 
-      {/* Image Upload */}
+      {/* Image Upload - Smaller on Mobile */}
       <div className="space-y-2">
         <Label>Poster Image</Label>
         
         {!imagePreview ? (
           <div
-            className="relative border-2 border-dashed border-border hover:border-primary rounded-lg p-8 transition-colors cursor-pointer bg-background"
+            className="relative border-2 border-dashed border-border hover:border-primary rounded-lg p-6 transition-colors cursor-pointer bg-background"
             onClick={() => document.getElementById('image-upload')?.click()}
           >
             <div className="flex flex-col items-center gap-2">
-              <Upload className="w-8 h-8 text-muted-foreground" />
-              <span className="text-sm text-muted-foreground">Click to upload poster image</span>
+              <Upload className="w-6 h-6 text-muted-foreground" />
+              <span className="text-sm text-muted-foreground">Tap to upload poster</span>
               <span className="text-xs text-muted-foreground">JPG, PNG, GIF up to 10MB</span>
             </div>
             <Input
@@ -233,7 +233,7 @@ export function AddEntryForm({ onSuccess }: AddEntryFormProps) {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="relative aspect-[2/3] max-w-[200px] rounded-lg overflow-hidden bg-secondary/30 border border-border"
+            className="relative aspect-[2/3] max-w-[150px] rounded-lg overflow-hidden bg-secondary/30 border border-border mx-auto"
           >
             <img
               src={imagePreview}
@@ -258,30 +258,32 @@ export function AddEntryForm({ onSuccess }: AddEntryFormProps) {
           id="notes"
           {...register('notes')}
           placeholder="Your personal notes..."
-          className="bg-background border-border/50 focus:ring-2 focus:ring-primary/20"
+          className="bg-background border-border/50"
         />
       </div>
 
-      {/* Actions */}
-      <div className="flex justify-end gap-3 pt-4 border-t border-border">
-        <Button
-          type="button"
-          variant="ghost"
-          onClick={onSuccess}
-          disabled={isSubmitting}
-        >
-          Cancel
-        </Button>
-        <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? (
-            <span className="flex items-center gap-2">
-              <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              Adding...
-            </span>
-          ) : (
-            'Add to Watch Log'
-          )}
-        </Button>
+      {/* Actions - Sticky on Mobile */}
+      <div className="sticky bottom-0 bg-background/95 backdrop-blur-sm pt-4 pb-2 border-t border-border -mx-6 px-6">
+        <div className="flex justify-end gap-3">
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={onSuccess}
+            disabled={isSubmitting}
+          >
+            Cancel
+          </Button>
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? (
+              <span className="flex items-center gap-2">
+                <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                Adding...
+              </span>
+            ) : (
+              'Add to Watch Log'
+            )}
+          </Button>
+        </div>
       </div>
     </motion.form>
   );

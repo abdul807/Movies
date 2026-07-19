@@ -10,6 +10,7 @@ import { Filters } from "../components/filters/Filters";
 import { Skeleton } from "../components/ui/skeleton";
 import { ThemeToggle } from "../components/ThemeToggle";
 import { getEntries, getStats } from "../lib/api";
+import { useUser, getDisplayName } from "../hooks/useUser";
 
 export function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -18,6 +19,9 @@ export function Dashboard() {
     genre: undefined as string | undefined, 
     status: undefined as string | undefined 
   });
+
+  const { user, loading: userLoading } = useUser();
+  const displayName = getDisplayName(user?.email);
 
   const { data: stats, isLoading: statsLoading } = useQuery({
     queryKey: ["stats"],
@@ -38,7 +42,7 @@ export function Dashboard() {
   }) || [];
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-background text-foreground">
       <div className="max-w-7xl mx-auto px-6 py-12">
         {/* Header */}
         <motion.div
@@ -48,8 +52,26 @@ export function Dashboard() {
           className="flex items-center justify-between mb-12"
         >
           <div>
-            <h1 className="text-4xl font-bold tracking-tight mb-1 ">Alabama's Watch</h1>
-            <p className="text-muted-foreground text-sm">My personal entertainment archive</p>
+            <motion.h1 
+              className="text-4xl font-light tracking-tight mb-1"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.1 }}
+            >
+              Watch Log
+            </motion.h1>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="flex items-center gap-2"
+            >
+              <p className="text-muted-foreground text-sm">Your personal entertainment archive</p>
+              <span className="text-muted-foreground text-sm">•</span>
+              <p className="text-primary text-sm font-medium">
+                Welcome back, {displayName} 👋
+              </p>
+            </motion.div>
           </div>
           <div className="flex items-center gap-4">
             <ThemeToggle />
@@ -59,7 +81,7 @@ export function Dashboard() {
 
         {/* Stats */}
         {statsLoading ? (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
             {[...Array(4)].map((_, i) => (
               <Skeleton key={i} className="h-24 rounded-2xl" />
             ))}
