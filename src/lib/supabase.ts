@@ -7,4 +7,22 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Missing Supabase environment variables');
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+  },
+});
+
+// Helper to get current user
+export async function getCurrentUser() {
+  const { data: { user }, error } = await supabase.auth.getUser();
+  if (error) throw error;
+  return user;
+}
+
+// Helper to check if user is authenticated
+export async function isAuthenticated() {
+  const { data: { session } } = await supabase.auth.getSession();
+  return !!session;
+}

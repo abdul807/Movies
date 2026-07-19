@@ -1,12 +1,10 @@
 import { motion } from "framer-motion";
-import { Film, Tv, Calendar, Star, Hash } from "lucide-react";
-import { formatDate } from "../../lib/utils";
+import { Film, Tv, Star, Hash } from "lucide-react";
 
 interface DashboardStatsProps {
   stats: {
     totalMovies: number;
     totalSeries: number;
-    lastWatched: any;
     favoriteGenre: string | null;
     averageRating: number | null;
   };
@@ -16,17 +14,12 @@ export function DashboardStats({ stats }: DashboardStatsProps) {
   const items = [
     { icon: Film, label: "Movies", value: stats?.totalMovies || 0 },
     { icon: Tv, label: "Series", value: stats?.totalSeries || 0 },
-    { 
-      icon: Calendar, 
-      label: "Last Watched", 
-      value: stats?.lastWatched ? formatDate(new Date(stats.lastWatched.watchedDate)) : "—" 
-    },
     { icon: Hash, label: "Favorite Genre", value: stats?.favoriteGenre || "—" },
     { icon: Star, label: "Avg Rating", value: stats?.averageRating ? `${stats.averageRating}/10` : "—" },
   ];
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-12">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
       {items.map((item, i) => (
         <motion.div
           key={item.label}
